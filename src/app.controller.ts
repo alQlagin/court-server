@@ -1,4 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
+import { TerminalPrintData } from './dto/terminal-print.dto';
+import { timer } from 'rxjs';
+import { mapTo } from 'rxjs/operators';
+import { JsonRpcBody } from './json-rpc/json-rpc-body.decorator';
 
 @Controller()
 export class AppController {
@@ -7,4 +11,8 @@ export class AppController {
     return { ping: 'pong' };
   }
 
+  @Post('/visit/print')
+  print(@JsonRpcBody() data: TerminalPrintData) {
+    return timer(1500).pipe(mapTo({ code: 200, result: data }));
+  }
 }
